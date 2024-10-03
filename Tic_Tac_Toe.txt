@@ -1,0 +1,151 @@
+#fun to print tic tac toe
+def print_t_t_t(values):
+  print("\n")
+  print("\t     |     |")
+  print("\t {}   | {}   | {}".format(values[0],values[1],values[2]))
+  print("\t_____|_____|____")
+
+  print("\t     |     |")
+  print("\t {}   | {}   | {}".format(values[3],values[4],values[5]))
+  print("\t_____|_____|____")
+
+  print("\t     |     |")
+
+  print("\t {}   | {}   | {}".format(values[6],values[7],values[8]))
+  print("\t     |     |")
+  print("\n")
+
+#to print scoreboard
+def print_scoreboard(score_board):
+  print("\t********************************")
+  print("\t  SCORE BOARD FOR TIC TAC TOE   ")
+  print("\t********************************")
+
+  players=list(score_board.keys())
+  print("\t   ",players[0], "\t   ",score_board[players[0]])
+  print("\t   ",players[1], "\t   ",score_board[players[1]])
+  print("\t-----------------------------------\n")
+
+#to check player won or not
+def c_w(player_position,current_player):
+  solution=[[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
+  for x in solution:
+    if all(y in player_position[current_player]for y in x):
+      return True
+  return False
+
+#to check game is draw or not
+def c_d(player_position):
+  if len(player_position['X'])+len(player_position['O'])==9:
+    return True
+  return False
+
+#for single tic tac toe game
+def s_g(current_player):
+  values=[' 'for x in range(9)]
+  player_position={'X':[],'O':[]}
+  while True:
+    print_t_t_t(values)
+    try:
+      print("player",current_player,"turn. which box?",end="")
+      move=int(input())
+    except ValueError:
+      print("wrong input! try again")
+      continue
+    if move < 1 or move > 9:
+      print("please choose correct num b\w 1 to 9")
+      continue
+    if values[move-1]!=' ':
+      print("the place you have chhosen is already filled. try again")
+      continue
+
+# to update score board and player position
+    values[move-1]= current_player
+    player_position[current_player].append(move)
+
+#to check winner
+    if c_w(player_position,current_player):
+      print_t_t_t(values)
+      print("player",current_player,"has won the game!")
+      print("\n")
+      return current_player
+
+#to check draw game
+    if c_d(player_position):
+      print_t_t_t(values)
+      print("game is draw")
+      print("\n")
+      return 'D'
+
+#to switch moves
+    if current_player=='X':
+      current_player='O'
+    else:
+      current_player='X'
+
+if __name__=="__main__":
+  print("player 1 details")
+  play1=input("enter name")
+  print("\n")
+
+  print("player 2 details")
+  play2=input("enter name")
+  print("\n")
+
+  current_player=play1
+
+  player_choice={'X':"",'O':""}
+
+  options=['X','O']
+
+  score_board={play1:0,play2:0}
+  print_scoreboard(score_board)
+
+
+  while True:
+    print("turn to choose for", current_player)
+    print("enter 1 for X")
+    print("enter 2 for O")
+    print("enter 3 to quit")
+
+ # try for input choice
+    try:
+      choice=int(input())
+    except ValueError:
+      print('wrong input! try again\n')
+      continue
+
+#for player choice
+    if choice==1:
+      player_choice['X']=current_player
+      if current_player==play1:
+        player_choice['O']=play2
+      else:
+        player_choice['O']=play1
+    elif choice==2:
+      player_choice['O']=current_player
+      if current_player==play1:
+        player_choice['X']=play2
+      else:
+        player_choice['X']=play1
+    elif choice==3:
+      print("final score")
+      print_scoreboard(score_board)
+      break
+    else:
+      print("wrong choice! try again\n")
+
+#to store winner in single game
+    winner=s_g(options[choice-1])
+
+#score board update acc to winner
+    if winner != 'D':
+      player_won=player_choice[winner]
+      score_board[player_won]=score_board[player_won]+1
+
+    print_scoreboard(score_board)
+
+    if current_player==play1:
+      current_player=play2
+    else:
+      curent_player=play1
